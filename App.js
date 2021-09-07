@@ -6,8 +6,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from "./navigation/Navigator";
 import { enableScreens } from "react-native-screens";
 import Colors from "./assets/colors";
+import { createStore, combineReducers } from "redux";
+import mealsReducer from "./store/reducers/mealsReducer";
+import { Provider } from "react-redux";
 
 enableScreens();
+
+const rootReducers = combineReducers({
+  meals: mealsReducer
+});
+
+const store = createStore(rootReducers);
 
 export default function App() {
 
@@ -36,7 +45,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <Provider store={store}>
       <StatusBar
         animated={true}
         hidden={false}
@@ -46,7 +55,7 @@ export default function App() {
       <NavigationContainer>
         <MainNavigator />
       </NavigationContainer>
-    </>
+    </Provider >
   );
 }
 

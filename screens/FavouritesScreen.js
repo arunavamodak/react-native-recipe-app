@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
-import { MEALS } from "../data/dummy-data";
+import { View, FlatList, StyleSheet, Text } from 'react-native';
 import Meal from "../components/Meal";
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from "../components/CustomHeaderButton";
+import { useSelector } from "react-redux";
 
 export default function FavouritesScreen(props) {
+
+    const favouriteMeals = useSelector(state => state.meals.favouriteMeals)
 
     const renderMealItem = (data) => {
         return (
@@ -32,14 +34,19 @@ export default function FavouritesScreen(props) {
     }, [props.navigation])
 
     return (
-        <View style={styles.screen}>
-            <FlatList
-                data={MEALS}
-                keyExtractor={(item) => item.id}
-                renderItem={renderMealItem}
-                style={{ width: "100%" }}
-            />
-        </View>
+        favouriteMeals && favouriteMeals.length
+            ?
+            (
+                <FlatList
+                    data={favouriteMeals}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderMealItem}
+                    style={{ width: "100%" }}
+                />
+            ) :
+            <View style={styles.screen}>
+                <Text>No favourites selected ...</Text>
+            </View>
     )
 };
 

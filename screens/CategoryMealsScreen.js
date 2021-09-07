@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import Meal from "../components/Meal";
-
-import { MEALS } from "../data/dummy-data";
+import { useSelector } from "react-redux";
 
 export default function CategoryMealScreen(props) {
 
     const data = props.route.params.item;
 
-    const filteredMeals = MEALS.filter((meal) => meal.categoryIds.includes(data.id))
+    const filteredMeals = useSelector(state => state.meals.filteredMeals);
+
+    const categoryMeals = filteredMeals.filter((meal) => meal.categoryIds.includes(data.id));
 
     useEffect(() => {
         props.navigation.setOptions({ title: data.title })
@@ -23,7 +24,7 @@ export default function CategoryMealScreen(props) {
     return (
         <View style={styles.screen}>
             <FlatList
-                data={filteredMeals}
+                data={categoryMeals}
                 keyExtractor={(item) => item.id}
                 renderItem={renderMealItem}
                 style={{ width: "100%" }}

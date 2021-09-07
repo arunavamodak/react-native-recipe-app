@@ -2,11 +2,20 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Animated } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from "../components/CustomHeaderButton";
-
+import { useSelector, useDispatch } from "react-redux";
+import { toggleFavourite } from "../store/actions/mealsAction";
 
 export default function MealDetailScreen(props) {
 
     const data = props.route.params.item;
+
+    const dispatch = useDispatch();
+
+    const favouriteMeals = useSelector(state => state.meals.favouriteMeals);
+
+    const updateFavourite = () => {
+        dispatch(toggleFavourite(data.id));
+    }
 
     useEffect(() => {
         props.navigation.setOptions
@@ -16,15 +25,15 @@ export default function MealDetailScreen(props) {
                     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
                         <Item
                             title="Fav"
-                            iconName='ios-star'
+                            iconName={favouriteMeals.findIndex(item => item.id === data.id) !== -1 ? 'ios-star' : 'ios-star-outline'}
                             onPress={() => {
-                                console.log("Fav");
+                                updateFavourite();
                             }}
                         />
                     </HeaderButtons>
                 ),
             });
-    }, [props.navigation, props.route.params])
+    }, [props.navigation, props.route.params, favouriteMeals])
 
     return (
         <>

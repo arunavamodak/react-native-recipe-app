@@ -44,7 +44,7 @@ export default function FilterScreen(props) {
 
     useEffect(() => {
         props.navigation.setParams({ saveFilter: saveFilter });
-    }, [saveFilter]);
+    }, [isGlutenFree, isVegan, isVegetarian, isLactoseFree]);
 
 
     const saveFilter = useCallback(() => {
