@@ -3,14 +3,27 @@ import { View, Text, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import FilterSwitch from "../components/FilterSwitch";
+import { useDispatch } from "react-redux";
+import { filterMeals } from "../store/actions/mealsAction";
 
 
 export default function FilterScreen(props) {
 
-    const [isGlutenFree, setGlutenFree] = useState(false);
-    const [isVegan, setVegan] = useState(false);
-    const [isVegetarian, setVegetarian] = useState(false);
-    const [isLactoseFree, setLactoseFree] = useState(false);
+    const [isGlutenFree, setGlutenFree] = useState(null);
+    const [isVegan, setVegan] = useState(null);
+    const [isVegetarian, setVegetarian] = useState(null);
+    const [isLactoseFree, setLactoseFree] = useState(null);
+
+    const dispatch = useDispatch();
+
+    const saveFilters = () => {
+        dispatch(filterMeals({
+            isGlutenFree: isGlutenFree,
+            isVegan: isVegan,
+            isVegetarian: isVegetarian,
+            isLactoseFree: isLactoseFree
+        }));
+    }
 
     useEffect(() => {
         props.navigation.setOptions
@@ -43,18 +56,7 @@ export default function FilterScreen(props) {
 
 
     useEffect(() => {
-        props.navigation.setParams({ saveFilter: saveFilter });
-    }, [isGlutenFree, isVegan, isVegetarian, isLactoseFree]);
-
-
-    const saveFilter = useCallback(() => {
-        const filters = {
-            isGlutenFree: isGlutenFree,
-            isVegan: isVegan,
-            isVegetarian: isVegetarian,
-            isLactoseFree: isLactoseFree
-        };
-        console.log(filters);
+        props.navigation.setParams({ saveFilter: saveFilters });
     }, [isGlutenFree, isVegan, isVegetarian, isLactoseFree]);
 
     return (
